@@ -1,7 +1,5 @@
-tasks:
-  - name: install Java 17
-    init: |
-      sdk install java 17.0.5-tem && sdk default java 17.0.5-tem
+image:
+  file: .gitpod.Dockerfile
 
 vscode:
   extensions:
