@@ -1,6 +1,11 @@
 image:
   file: .gitpod.Dockerfile
 
+tasks:
+  - name: Setup Keyloak
+    command: |
+      docker compose up -d
+
 ports:
   - port: 8180
     onOpen: notify
