@@ -1,6 +1,11 @@
 image:
   file: .gitpod.Dockerfile
 
+ports:
+  - port: 8180
+    visibility: private
+    description: Keyloak
+
 vscode:
   extensions:
     # Spring Boot Extension Pack

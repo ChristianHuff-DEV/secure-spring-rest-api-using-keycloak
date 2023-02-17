@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:20.0.0
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB_URL_HOST: keycloak-datbase
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: dbuser
+      KC_DB_PASSWORD: dbuser
+      KC_PROXY: "edge"
+      KC_FEATURES: "account-api,authorization"
+    ports:
+      - 8180:8080
+    # volumes:
+      # Location of realm to import
+      # - ${PWD}/keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+    depends_on:
+      - keycloak-datbase
+
+  keycloak-datbase:
+    image: postgres:10
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: dbuser
