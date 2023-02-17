@@ -1,0 +1,13 @@
+tasks:
+  - name: install Java 17
+    init: |
+      sdk install java 17.0.5-tem && sdk default java 17.0.5-tem
+
+vscode:
+  extensions:
+    # Spring Boot Extension Pack
+    - Pivotal.vscode-boot-dev-pack
+    # Extension Pack for Java
+    - vscjava.vscode-java-pack
+    # XML
+    - redhat.vscode-xml
