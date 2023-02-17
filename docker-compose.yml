@@ -16,9 +16,9 @@ services:
       KC_FEATURES: "account-api,authorization"
     ports:
       - 8180:8080
-    # volumes:
+    volumes:
       # Location of realm to import
-      # - ${PWD}/keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+      - ${PWD}/realm-export.json:/opt/keycloak/data/import/realm-export.json
     depends_on:
       - keycloak-datbase
 

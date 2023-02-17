@@ -3,7 +3,7 @@ image:
 
 ports:
   - port: 8180
-    visibility: private
+    onOpen: notify
     description: Keyloak
 
 vscode:
