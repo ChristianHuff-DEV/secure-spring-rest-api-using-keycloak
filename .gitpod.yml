@@ -19,3 +19,5 @@ vscode:
     - vscjava.vscode-java-pack
     # XML
     - redhat.vscode-xml
+    # Gradle for Java
+    - vscjava.vscode-gradle
