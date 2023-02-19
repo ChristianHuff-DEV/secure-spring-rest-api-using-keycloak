@@ -12,10 +12,31 @@ public class ApiController {
   @RequestMapping(
           method = RequestMethod.GET,
           value = "/public",
-          produces = { "text/plain" }
+          produces = {"text/plain"}
   )
-  public ResponseEntity<String> publicEndpoint(){
+  public ResponseEntity<String> publicEndpoint() {
 
     return new ResponseEntity<>("Public Endpoint", HttpStatus.CREATED);
   }
+
+  @RequestMapping(
+          method = RequestMethod.GET,
+          value = "/user",
+          produces = {"text/plain"}
+  )
+  public ResponseEntity<String> userEndpoint() {
+
+    return new ResponseEntity<>("User Endpoint", HttpStatus.CREATED);
+  }
+
+  @RequestMapping(
+          method = RequestMethod.GET,
+          value = "/admin",
+          produces = {"text/plain"}
+  )
+  public ResponseEntity<String> adminEndpoint() {
+
+    return new ResponseEntity<>("Admin Endpoint", HttpStatus.CREATED);
+  }
+
 }
