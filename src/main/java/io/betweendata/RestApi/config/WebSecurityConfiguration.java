@@ -1,5 +1,6 @@
 package io.betweendata.RestApi.config;
 
+import io.betweendata.RestApi.security.oauth2.KeycloakJwtRolesConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,16 +18,17 @@ public class WebSecurityConfiguration {
   SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
     DelegatingJwtGrantedAuthoritiesConverter authoritiesConverter =
-            new DelegatingJwtGrantedAuthoritiesConverter(new JwtGrantedAuthoritiesConverter());
+            new DelegatingJwtGrantedAuthoritiesConverter(new JwtGrantedAuthoritiesConverter(),
+                    new KeycloakJwtRolesConverter());
 
     httpSecurity.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwt -> new JwtAuthenticationToken(jwt,
             authoritiesConverter.convert(jwt)));
 
     httpSecurity.authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/**")
-            .hasAuthority("SCOPE_email")
-            .anyRequest()
-            .authenticated());
+            .requestMatchers("/user").hasAuthority(KeycloakJwtRolesConverter.PREFIX_RESOURCE_ROLE + "rest-api_user")
+            .requestMatchers("/admin").hasAuthority(KeycloakJwtRolesConverter.PREFIX_RESOURCE_ROLE + "rest-api_admin")
+            .requestMatchers("/public").permitAll()
+    );
 
     return httpSecurity.build();
   }
