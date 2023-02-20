@@ -11,15 +11,32 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class KeycloakJwtRolesConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
+  /**
+   * Prefix used for realm level roles.
+   */
   public static final String PREFIX_REALM_ROLE = "ROLE_realm_";
-
+  /**
+   * Prefix used in combination with the resource (client) name for resource level roles.
+   */
   public static final String PREFIX_RESOURCE_ROLE = "ROLE_";
 
+  /**
+   * Name of the claim containing the realm level roles
+   */
   private static final String CLAIM_REALM_ACCESS = "realm_access";
+  /**
+   * Name of the claim containing the resources (clients) the user has access to.
+   */
   private static final String CLAIM_RESOURCE_ACCESS = "resource_access";
+  /**
+   * Name of the claim containing roles. (Applicable to realm and resource level.)
+   */
   private static final String CLAIM_ROLES = "roles";
 
 
+  /**
+   * Extracts the realm and resource level roles from a JWT token distinguishing between them using prefixes.
+   */
   @Override
   public Collection<GrantedAuthority> convert(Jwt jwt) {
     // Collection that will hold the extracted roles
