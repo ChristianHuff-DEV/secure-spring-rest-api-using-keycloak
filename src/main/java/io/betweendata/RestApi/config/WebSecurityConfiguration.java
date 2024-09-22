@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.DelegatingJwtGrantedAuthoritiesConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -22,17 +22,16 @@ public class WebSecurityConfiguration {
   @Bean
   SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-    DelegatingJwtGrantedAuthoritiesConverter authoritiesConverter =
-            // Using the delegating converter multiple converters can be combined
-            new DelegatingJwtGrantedAuthoritiesConverter(
-                    // First add the default converter
-                    new JwtGrantedAuthoritiesConverter(),
-                    // Second add our custom Keycloak specific converter
-                    new KeycloakJwtRolesConverter());
+    JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new DelegatingJwtGrantedAuthoritiesConverter(
+            new JwtGrantedAuthoritiesConverter(),  // Default converter
+            new KeycloakJwtRolesConverter()        // Custom Keycloak-specific converter
+    ));
 
     // Set up http security to use the JWT converter defined above
-    httpSecurity.oauth2ResourceServer().jwt().jwtAuthenticationConverter(
-            jwt -> new JwtAuthenticationToken(jwt, authoritiesConverter.convert(jwt)));
+    httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
+            .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
+    );
 
     httpSecurity.authorizeHttpRequests(authorize -> authorize
             // Only users with the role "user" can access the endpoint /user.
